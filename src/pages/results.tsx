@@ -120,11 +120,11 @@ export default function Results() {
                     (Number(ls) + Number(lr) + totalConnection) *
                     0.017
                   ).toFixed(4)}`}</p>
-                  <p>{`Amt = ${
+                  <p>{`Amt = ${(
                     Number(hr) +
                     Number(hs) +
                     (Number(ls) + Number(lr) + totalConnection) * 0.017
-                  } m.c.a`}</p>
+                  ).toFixed(4)} m.c.a`}</p>
                 </div>
               </div>
             </div>

@@ -1,6 +1,7 @@
 import { TextField } from "@mui/material";
 import Select from "react-select";
 import Image from "next/image";
+import { toast } from "react-toastify";
 import { Container, Wrapper, SubmitButton } from "../styles/home";
 import { useState } from "react";
 import { useResults } from "../hooks";
@@ -91,11 +92,11 @@ export default function Home() {
       ls === "" ||
       lr === ""
     ) {
-      console.log("todos os campos devem estar preenchidos");
+      toast.error("todos os campos devem estar preenchidos");
       return;
     }
     if (!connectionsList.length) {
-      console.log("adicione pelomenos uma conexão");
+      toast.error("adicione pelomenos uma conexão");
       return;
     }
 
