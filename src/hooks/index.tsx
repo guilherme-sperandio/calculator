@@ -27,6 +27,7 @@ interface IConnectionList {
   connection: string | undefined;
   connectionValue: number | undefined;
   quantity: number | undefined;
+  totalSize: number;
 }
 
 export const ResultsContext = createContext({} as resultsTypes);

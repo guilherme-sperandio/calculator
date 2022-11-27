@@ -9,12 +9,18 @@ import { useRouter } from "next/router";
 interface ISelect {
   value: number;
   label: string;
+  size: number;
+}
+
+interface IQuantitySelect {
+  value: number;
+  label: string;
 }
 
 export default function Home() {
   const router = useRouter();
   const [connection, setConnection] = useState<ISelect | null>(null);
-  const [quantity, setQuantity] = useState<ISelect | null>(null);
+  const [quantity, setQuantity] = useState<IQuantitySelect | null>(null);
   const {
     connectionsList,
     dr,
@@ -35,12 +41,12 @@ export default function Home() {
   } = useResults();
 
   const connections = [
-    { value: 1, label: "Válvula de Retenção" },
-    { value: 2, label: "Curvas de 90º" },
-    { value: 3, label: "Curvas de 45º" },
-    { value: 4, label: "Registro de Gaveta" },
-    { value: 5, label: "Saída de Canalização" },
-    { value: 6, label: "Válvula de Pé com Crivo" },
+    { value: 1, label: "Válvula de Retenção", size: 32 },
+    { value: 2, label: "Curvas de 90º", size: 3 },
+    { value: 3, label: "Curvas de 45º", size: 1.8 },
+    { value: 4, label: "Registro de Gaveta", size: 1.7 },
+    { value: 5, label: "Saída de Canalização", size: 7.5 },
+    { value: 6, label: "Válvula de Pé com Crivo", size: 78 },
   ];
   const quantitys = [
     { value: 1, label: "1" },
@@ -62,6 +68,7 @@ export default function Home() {
         connection: connection?.label,
         connectionValue: connection?.value,
         quantity: quantity?.value,
+        totalSize: Number(quantity?.value) * Number(connection?.size),
       },
     ]);
   }

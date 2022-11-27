@@ -1,3 +1,4 @@
+import { connect } from "http2";
 import { useEffect, useState } from "react";
 import { useResults } from "../hooks";
 import { Container, Wrapper } from "../styles/results";
@@ -6,40 +7,12 @@ export default function Results() {
   const { connectionsList, dr, ds, hr, hs, lr, ls, output } = useResults();
   const [totalConnection, setTotalConnection] = useState(0);
 
-  console.log(dr, ds, connectionsList);
-
   useEffect(() => {
     let total = 0;
-    connectionsList.map(
-      (value) =>
-        (total =
-          total +
-          Number(value.quantity) *
-            Number(connectionValues[value.connectionValue].value))
-    );
-  }, []);
-  console.log(totalConnection);
+    connectionsList.map((value) => (total = total + value.totalSize));
+    setTotalConnection(total);
+  }, [connectionsList]);
 
-  const connectionValues = {
-    1: {
-      value: 32,
-    },
-    2: {
-      value: 3,
-    },
-    6: {
-      value: 22,
-    },
-    3: {
-      value: 1.8,
-    },
-    4: {
-      value: 1.7,
-    },
-    5: {
-      value: 7.5,
-    },
-  };
   return (
     <Container>
       <Wrapper>
@@ -113,14 +86,9 @@ export default function Results() {
                 <div>
                   {connectionsList.map((connection, index) => (
                     <>
-                      <p key={index}>{`${connection.connection} (${
-                        connection.quantity
-                      }x) = ${
-                        Number(connection.quantity) *
-                        Number(
-                          connectionValues[connection.connectionValue].value
-                        )
-                      }m`}</p>
+                      <p
+                        key={index}
+                      >{`${connection.connection} (${connection.quantity}x) = ${connection.totalSize}m`}</p>
                     </>
                   ))}
                   <p>{`O valor da somatória das perdas é: ${totalConnection}m`}</p>
