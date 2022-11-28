@@ -22,6 +22,7 @@ export default function Home() {
   const router = useRouter();
   const [connection, setConnection] = useState<ISelect | null>(null);
   const [quantity, setQuantity] = useState<IQuantitySelect | null>(null);
+  const [loseConnection, setLoseConnection] = useState(0);
   const {
     connectionsList,
     dr,
@@ -63,15 +64,20 @@ export default function Home() {
   ];
 
   function handleAddConnection() {
+    if (loseConnection === 0) {
+      toast.error("O campo Perda de Carga é obrigatório!");
+      return;
+    }
     setConnectionsList((oldState) => [
       ...oldState,
       {
         connection: connection?.label,
         connectionValue: connection?.value,
         quantity: quantity?.value,
-        totalSize: Number(quantity?.value) * Number(connection?.size),
+        totalSize: Number(quantity?.value) * Number(loseConnection),
       },
     ]);
+    setLoseConnection(0);
   }
 
   function handleSubmit(e: any) {
@@ -195,6 +201,17 @@ export default function Home() {
                     placeholder="Quantidade"
                     options={quantitys}
                     onChange={(value) => setQuantity(value)}
+                  />
+                </div>
+                <div>
+                  <TextField
+                    id="standard-basic"
+                    label="Perda de Carga"
+                    variant="standard"
+                    onChange={(value) =>
+                      setLoseConnection(Number(value.target.value))
+                    }
+                    value={loseConnection}
                   />
                 </div>
                 <button
