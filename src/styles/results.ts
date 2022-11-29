@@ -44,7 +44,7 @@ export const Wrapper = styled.section`
 
       > div {
         div {
-          background-color: #ccc;
+          background-color: #e4e4e4;
           margin-bottom: 2rem;
           padding: 0.3rem;
           border-radius: 0.5rem;
