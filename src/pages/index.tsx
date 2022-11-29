@@ -211,7 +211,6 @@ export default function Home() {
                     onChange={(value) =>
                       setLoseConnection(Number(value.target.value))
                     }
-                    value={loseConnection}
                   />
                 </div>
                 <button

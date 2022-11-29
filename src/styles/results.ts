@@ -22,6 +22,7 @@ export const Wrapper = styled.section`
   min-width: 900px;
   display: flex;
   justify-content: center;
+  margin: 2rem;
   h2 {
     color: #1a4d9a;
     font-size: 42px;

@@ -1,20 +1,133 @@
-import { connect } from "http2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 import { useEffect, useState } from "react";
+import Modal from "react-modal";
 import { useResults } from "../hooks";
+import { SubmitButton } from "../styles/home";
 import { Container, Wrapper } from "../styles/results";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    width: "50%",
+    heigth: "50%",
+  },
+};
+Modal.setAppElement("body");
 
 export default function Results() {
   const { connectionsList, dr, ds, hr, hs, lr, ls, output } = useResults();
   const [totalConnection, setTotalConnection] = useState(0);
+  const [showGraphics, setShowGraphics] = useState(false);
+
+  const [systemCalc, setSystemCalc] = useState<number[]>([]);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "Curva do sistema",
+      },
+    },
+  };
+
+  const labels = [
+    "0",
+    "20",
+    "40",
+    "60",
+    "80",
+    "100",
+    "120",
+    "140",
+    "160",
+    "180",
+  ];
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: " Curva do sistema de bombeamento",
+        data: labels.map((__, index) => systemCalc[index]),
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
 
   useEffect(() => {
     let total = 0;
+
+    const manValue = (
+      Number(hr) +
+      Number(hs) +
+      (Number(ls) + Number(lr) + totalConnection) * 0.017
+    ).toFixed(4);
+
+    const c2 =
+      (Number(manValue) - (Number(hs) + Number(hr)) / (Number(output) / 3600)) ^
+      2;
     connectionsList.map((value) => (total = total + value.totalSize));
     setTotalConnection(total);
-  }, [connectionsList]);
+    let counter = 0;
+    for (let index = 0; index < 10; index++) {
+      const result = Math.sqrt(counter - (Number(hs) + Number(hr)) / c2);
+
+      setSystemCalc((oldState) => [...oldState, result]);
+
+      counter = counter + 20;
+    }
+  }, [connectionsList, hr, hs, lr, ls, output, totalConnection]);
+
+  console.log(systemCalc);
+
+  function openGraphicsModal() {
+    setShowGraphics(true);
+  }
+
+  function closeGraphicsModal() {
+    setShowGraphics(false);
+  }
 
   return (
     <Container>
+      <Modal
+        isOpen={showGraphics}
+        onRequestClose={closeGraphicsModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <Line options={options} data={data} />
+      </Modal>
       <Wrapper>
         <div>
           <h2>Solução</h2>
@@ -127,6 +240,11 @@ export default function Results() {
                   ).toFixed(4)} m.c.a`}</p>
                 </div>
               </div>
+            </div>
+            <div>
+              <SubmitButton type="button" onClick={openGraphicsModal}>
+                Ver Gráficos
+              </SubmitButton>
             </div>
           </div>
         </div>
