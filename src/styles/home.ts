@@ -6,7 +6,7 @@ export const Container = styled.main`
   justify-content: center;
   width: 100%;
   min-height: 100vh;
-  background-color: #535c68;
+  background-image: url("/assets/bg.svg");
   h1 {
     padding: 0;
     margin: 0;
