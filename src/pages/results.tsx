@@ -94,8 +94,10 @@ export default function Results() {
     ).toFixed(4);
 
     const c2 =
-      (Number(manValue) - (Number(hs) + Number(hr)) / (Number(output) / 3600)) ^
+      ((Number(manValue) - (Number(hs) + Number(hr))) /
+        (Number(output) / 3600)) ^
       2;
+    console.log(manValue, hs, hr, Number(output) / 3600, "teste");
     connectionsList.map((value) => (total = total + value.totalSize));
     setTotalConnection(total);
     let counter = 0;
