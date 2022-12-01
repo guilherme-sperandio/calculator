@@ -59,18 +59,9 @@ export default function Results() {
     },
   };
 
-  const labels = [
-    "0",
-    "20",
-    "40",
-    "60",
-    "80",
-    "100",
-    "120",
-    "140",
-    "160",
-    "180",
-  ];
+  const labels = ["50", "100", "150", "200"];
+
+  var xValues = [39, 36, 29, 20];
 
   const data = {
     labels,
@@ -80,6 +71,12 @@ export default function Results() {
         data: labels.map((__, index) => systemCalc[index]),
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+      {
+        label: "Curva da bomba",
+        borderColor: "rgba(0,0,100,1)",
+        backgroundColor: "rgba(81, 98, 194, 0.5)",
+        data: xValues,
       },
     ],
   };
@@ -94,23 +91,22 @@ export default function Results() {
     ).toFixed(4);
 
     const c2 =
-      ((Number(manValue) - (Number(hs) + Number(hr))) /
-        (Number(output) / 3600)) ^
-      2;
-    console.log(manValue, hs, hr, Number(output) / 3600, "teste");
+      (Number(manValue) - (Number(hs) + Number(hr))) /
+      Math.pow(Number(output) / 3600, 2);
+
     connectionsList.map((value) => (total = total + value.totalSize));
     setTotalConnection(total);
-    let counter = 0;
-    for (let index = 0; index < 10; index++) {
-      const result = Math.sqrt(counter - (Number(hs) + Number(hr)) / c2);
+    let counter = 50;
+    for (let index = 0; index < 4; index++) {
+      const vazao = Math.pow(counter / 3600, 2);
+      const teste = c2 * vazao;
+      const result = Number(hs) + Number(hr) + teste;
 
       setSystemCalc((oldState) => [...oldState, result]);
 
-      counter = counter + 20;
+      counter = counter + 50;
     }
   }, [connectionsList, hr, hs, lr, ls, output, totalConnection]);
-
-  console.log(systemCalc);
 
   function openGraphicsModal() {
     setShowGraphics(true);
